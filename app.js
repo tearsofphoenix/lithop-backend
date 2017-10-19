@@ -8,6 +8,8 @@ var http = require('http'),
     passport = require('passport'),
     errorhandler = require('errorhandler'),
     mongoose = require('mongoose');
+var redis = require('redis');
+var config = require('./config');
 
 var isProduction = process.env.NODE_ENV === 'production';
 
@@ -24,7 +26,19 @@ app.use(bodyParser.json());
 app.use(require('method-override')());
 app.use(express.static(__dirname + '/public'));
 
-app.use(session({ secret: 'conduit', cookie: { maxAge: 60000 }, resave: false, saveUninitialized: false  }));
+const RedisStore = require('connect-redis')(session);
+const redisClient = redis.createClient(config.redis.port, config.redis.host);
+app.use(session({
+  store: new RedisStore({
+    ttl: 12 * 60 * 60, // seconds
+    client: redisClient,
+    logErrors: true
+  }),
+  secret: '8d31c99f-eb51-477d-b32a-e43792066729',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {maxAge: 12 * 60 * 60 * 1000} // micro seconds
+}));
 
 if (!isProduction) {
   app.use(errorhandler());
@@ -79,6 +93,6 @@ app.use(function(err, req, res, next) {
 });
 
 // finally, let's start our server...
-var server = app.listen( process.env.PORT || 3000, function(){
+var server = app.listen( process.env.PORT || 8000, function(){
   console.log('Listening on port ' + server.address().port);
 });

@@ -1,0 +1,16 @@
+{
+  "apps": [
+    {
+      "name": "lithop-backend",
+      "script": "./app.js",
+      "instances": 1,
+      "exec_mode": "fork",
+      "env": {
+        "NODE_ENV": "production",
+        "PORT": 8000,
+        "MONGODB_URI": "mongodb://localhost/conduit",
+        "SECRET": "5c9882da-eeb3-43a3-ad39-378bdf14b401"
+      }
+    }
+  ]
+}
