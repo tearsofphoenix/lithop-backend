@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var mongoosastic = require('mongoosastic');
 var uniqueValidator = require('mongoose-unique-validator');
 var crypto = require('crypto');
 var jwt = require('jsonwebtoken');
@@ -95,5 +96,7 @@ UserSchema.methods.isFollowing = function(id){
     return followId.toString() === id.toString();
   });
 };
+
+UserSchema.plugin(mongoosastic);
 
 mongoose.model('User', UserSchema);

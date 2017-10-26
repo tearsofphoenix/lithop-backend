@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-
+var mongoosastic = require('mongoosastic');
 var CommentSchema = new mongoose.Schema({
   body: String,
   author: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
@@ -16,4 +16,5 @@ CommentSchema.methods.toJSONFor = function(user){
   };
 };
 
+CommentSchema.plugin(mongoosastic);
 mongoose.model('Comment', CommentSchema);

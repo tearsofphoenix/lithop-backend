@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var mongoosastic = require('mongoosastic');
 var uniqueValidator = require('mongoose-unique-validator');
 var slug = require('slug');
 var User = mongoose.model('User');
@@ -52,5 +53,7 @@ ArticleSchema.methods.toJSONFor = function(user){
     author: this.author.toProfileJSONFor(user)
   };
 };
+
+ArticleSchema.plugin(mongoosastic);
 
 mongoose.model('Article', ArticleSchema);
