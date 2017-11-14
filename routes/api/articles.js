@@ -183,6 +183,11 @@ router.put('/:article', auth.required, function(req, res, next) {
         req.article.tagList = req.body.article.tagList
       }
 
+      console.log(172, req.body);
+      if(typeof req.body.article.image !== 'undefined'){
+        req.article.image = req.body.article.image
+      }
+
       req.article.save().then(function(article){
         return res.json({article: article.toJSONFor(user)});
       }).catch(next);

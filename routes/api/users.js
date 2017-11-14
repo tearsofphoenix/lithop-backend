@@ -3,12 +3,16 @@ var router = require('express').Router();
 var passport = require('passport');
 var User = mongoose.model('User');
 var auth = require('../auth');
+import createToken from './file/token';
 
 router.get('/user', auth.required, function(req, res, next){
   User.findById(req.payload.id).then(function(user){
     if(!user){ return res.sendStatus(401); }
 
-    return res.json({user: user.toAuthJSON()});
+    return res.json({
+      user: user.toAuthJSON(),
+      uptoken: createToken()
+    });
   }).catch(next);
 });
 
@@ -53,7 +57,10 @@ router.post('/users/login', function(req, res, next){
 
     if(user){
       user.token = user.generateJWT();
-      return res.json({user: user.toAuthJSON()});
+      return res.json({
+        user: user.toAuthJSON(),
+        uptoken: createToken()
+      });
     } else {
       return res.status(422).json(info);
     }
