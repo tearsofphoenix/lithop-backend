@@ -137,6 +137,20 @@ router.post('/', auth.required, function(req, res, next) {
   }).catch(next);
 });
 
+router.get('/search', function (req, res, next) {
+  const q = req.query.q;
+  Article.esSearch({
+    from: 0,
+    size: 20,
+    query: {
+      title: q
+    }
+  }, function(err, result) {
+    res.json(result);
+  });
+
+});
+
 // return a article
 router.get('/:article', auth.optional, function(req, res, next) {
   Promise.all([
