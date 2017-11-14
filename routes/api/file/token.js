@@ -8,6 +8,9 @@ const options = {
   scope: kBucketName,
 };
 const mac = new qiniu.auth.digest.Mac(qiniu.conf.ACCESS_KEY, qiniu.conf.SECRET_KEY);
+const config = new qiniu.conf.Config();
+// 空间对应的机房
+config.zone = qiniu.zone.Zone_z2;
 
 //构建上传策略函数
 export default function () {
