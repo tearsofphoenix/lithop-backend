@@ -2,6 +2,7 @@ var router = require('express').Router();
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
 var auth = require('../auth');
+import createToken from './file/token';
 
 // Preload user profile on routes with ':username'
 router.param('username', function(req, res, next, username){
@@ -15,14 +16,26 @@ router.param('username', function(req, res, next, username){
 });
 
 router.get('/:username', auth.optional, function(req, res, next){
+  const uptoken = createToken();
   if(req.payload){
     User.findById(req.payload.id).then(function(user){
-      if(!user){ return res.json({profile: req.profile.toProfileJSONFor(false)}); }
+      if(!user){
+        return res.json({
+          profile: req.profile.toProfileJSONFor(false),
+          uptoken,
+        });
+      }
 
-      return res.json({profile: req.profile.toProfileJSONFor(user)});
+      return res.json({
+        profile: req.profile.toProfileJSONFor(user),
+        uptoken
+      });
     });
   } else {
-    return res.json({profile: req.profile.toProfileJSONFor(false)});
+    return res.json({
+      profile: req.profile.toProfileJSONFor(false),
+      uptoken
+    });
   }
 });
 
