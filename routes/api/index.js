@@ -5,6 +5,7 @@ router.use('/profiles', require('./profiles'));
 router.use('/articles', require('./articles'));
 router.use('/tags', require('./tags'));
 router.use('/file', require('./file'));
+router.use('/search', require('./search'));
 
 router.use(function(err, req, res, next){
   if(err.name === 'ValidationError'){
