@@ -25,7 +25,7 @@ router.get('/', function(req, res, next) {
         });
       } else {
         res.json({
-          articles: docs.map(article => article.toJSONFor(user))
+          articles: docs.map(article => article.toJSONFor(article.author))
         });
       }
     });
